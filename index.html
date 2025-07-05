@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prachi210's Projects</title>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; margin: 0; }
+    header { background: #24292e; color: #fff; padding: 2rem 1rem; text-align: center; }
+    h1 { margin: 0 0 0.5em; }
+    #repo-list { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; padding: 2rem; }
+    .repo-card {
+      background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #0001; padding: 1.5rem;
+      width: 300px; display: flex; flex-direction: column; transition: 0.2s;
+    }
+    .repo-card:hover { box-shadow: 0 4px 16px #0002; transform: translateY(-2px);}
+    .repo-title { font-size: 1.2em; color: #0366d6; margin-bottom: 0.5em; text-decoration: none;}
+    .repo-desc { color: #555; margin-bottom: 1em;}
+    .repo-meta { font-size: 0.9em; color: #999; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Prachi210's Projects</h1>
+    <p>A showcase of all my public GitHub repositories 🚀</p>
+  </header>
+  <main>
+    <div id="repo-list"></div>
+  </main>
+  <script>
+    const username = "Prachi210";
+    fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`)
+      .then(res => res.json())
+      .then(repos => {
+        const container = document.getElementById('repo-list');
+        repos.filter(r => !r.fork).forEach(repo => {
+          const card = document.createElement('div');
+          card.className = 'repo-card';
+          card.innerHTML = `
+            <a class="repo-title" href="${repo.html_url}" target="_blank">${repo.name}</a>
+            <div class="repo-desc">${repo.description || "No description"}</div>
+            <div class="repo-meta">
+              ⭐ ${repo.stargazers_count} | Updated: ${new Date(repo.updated_at).toLocaleDateString()}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      });
+  </script>
+</body>
+</html>
